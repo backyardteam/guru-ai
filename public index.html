@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Teacher Assistant SD Indonesia</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="logo">AI Teacher<span>SD</span></div>
+            <nav>
+                <a href="#" data-page="dashboard" class="active">🏠 Dashboard</a>
+                <a href="#" data-page="siswa">👥 Data Siswa</a>
+                <a href="#" data-page="soal">📝 Generator Soal</a>
+                <a href="#" data-page="banksoal">📚 Bank Soal</a>
+                <a href="#" data-page="koreksi">✅ Koreksi Jawaban</a>
+                <a href="#" data-page="analisis">📊 Analisis Kompetensi</a>
+                <a href="#" data-page="laporan">📄 Laporan</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="user">Halo, Guru Kelas 3</div>
+            </div>
+            <div id="page-container"></div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="siswa.js"></script>
+    <script src="soal.js"></script>
+    <script src="koreksi.js"></script>
+    <script src="analisis.js"></script>
+    <script src="laporan.js"></script>
+</body>
+</html>

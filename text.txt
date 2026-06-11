@@ -1,0 +1,35 @@
+ai-teacher-assistant/
+├── package.json
+├── server.js
+├── database.js
+├── .env
+├── routes/
+│   ├── siswa.js
+│   ├── soal.js
+│   ├── koreksi.js
+│   ├── analisis.js
+│   └── laporan.js
+├── controllers/
+│   ├── siswaController.js
+│   ├── soalController.js
+│   ├── koreksiController.js
+│   ├── analisisController.js
+│   └── laporanController.js
+├── services/
+│   ├── aiService.js
+│   └── exportService.js
+├── models/
+│   └── database.sql
+├── public/
+│   ├── index.html
+│   ├── style.css
+│   ├── app.js
+│   ├── dashboard.js
+│   ├── siswa.js
+│   ├── soal.js
+│   ├── koreksi.js
+│   ├── analisis.js
+│   ├── laporan.js
+│   └── assets/
+│       └── logo.svg
+└── install.sh
