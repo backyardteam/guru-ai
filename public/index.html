@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI Teacher Assistant</title>
+  </head>
+  <body>
+    <h1>Tambah Siswa Baru</h1>
+    <div>
+      <input type="text" id="nis" placeholder="NIS Siswa (Wajib)" />
+      <input type="text" id="nama" placeholder="Nama Siswa (Wajib)" />
+      <input type="text" id="kelas" placeholder="Kelas (Contoh: 3A)" />
+      <input type="text" id="jenis_kelamin" placeholder="L/P" />
+      <input type="text" id="catatan_guru" placeholder="Catatan Tambahan" />
+      <button onclick="tambahSiswa()">Simpan Data</button>
+    </div>
+
+    <h2>Daftar Siswa</h2>
+    <ul id="list-siswa"></ul>
+
+    <script>
+      async function loadSiswa() {
+        try {
+          const res = await fetch("/api/siswa");
+          if (!res.ok) throw new Error("Gagal memuat data");
+          const data = await res.json();
+
+          document.getElementById("list-siswa").innerHTML = data
+            .map(
+              (s) =>
+                `<li><strong>[${s.nis || "-"}] ${s.nama}</strong> - Kelas: ${s.kelas || "-"} | Kelamin: ${s.jenis_kelamin || "-"} <br> <em>Catatan: ${s.catatan_guru || "-"}</em></li><br>`,
+            )
+            .join("");
+        } catch (error) {
+          console.error("Error loading siswa:", error);
+        }
+      }
+
+      async function tambahSiswa() {
+        const nis = document.getElementById("nis").value;
+        const nama = document.getElementById("nama").value;
+        const kelas = document.getElementById("kelas").value;
+        const jenis_kelamin = document.getElementById("jenis_kelamin").value;
+        const catatan_guru = document.getElementById("catatan_guru").value;
+
+        if (!nama || !nis) {
+          alert("NIS dan Nama siswa wajib diisi!");
+          return;
+        }
+
+        try {
+          const res = await fetch("/api/siswa", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              nis: nis,
+              nama: nama,
+              kelas: kelas,
+              jenis_kelamin: jenis_kelamin,
+              catatan_guru: catatan_guru,
+            }),
+          });
+
+          const result = await res.json();
+
+          if (res.ok || result.success) {
+            alert("Data berhasil disimpan!");
+            document.getElementById("nis").value = "";
+            document.getElementById("nama").value = "";
+            document.getElementById("kelas").value = "";
+            document.getElementById("jenis_kelamin").value = "";
+            document.getElementById("catatan_guru").value = "";
+            loadSiswa();
+          } else {
+            alert("Gagal menyimpan: " + (result.message || result.error));
+          }
+        } catch (error) {
+          alert("Gagal terhubung ke server.");
+          console.error("Error:", error);
+        }
+      }
+
+      loadSiswa();
+    </script>
+  </body>
+</html>

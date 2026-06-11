@@ -1,37 +1,42 @@
-const { getDb } = require('../database');
-const aiService = require('../services/aiService');
+const { getDb } = require("../database");
 
-async function analisisKompetensi(req, res) {
-    const { siswaId, mataPelajaran, jawaban, soal } = req.body;
-    const analisis = await aiService.analisisKompetensi(siswaId, mataPelajaran, jawaban, soal);
-    res.json(analisis);
-}
-
-async function learningGap(req, res) {
-    const { kelompokSaatIni, targetKelompok, kompetensiBelumDikuasai } = req.body;
-    const gap = await aiService.learningGapAnalysis(kelompokSaatIni, targetKelompok, kompetensiBelumDikuasai);
-    res.json(gap);
-}
-
-async function treatment(req, res) {
-    const { kompetensiBelumDikuasai, durasi } = req.body;
-    const treatment = await aiService.generateTreatment(kompetensiBelumDikuasai, durasi);
-    res.json(treatment);
-}
-
-async function analisisKelas(req, res) {
+async function getAnalisisAsesmen(req, res) {
+  try {
     const db = getDb();
-    const hasil = await db.all(`
-        SELECT s.nama, k.nilai, k.kelompok 
-        FROM kelompok_siswa k 
-        JOIN siswa s ON k.siswa_id = s.id 
-        WHERE k.mata_pelajaran = 'Matematika'
-    `);
-    const nilaiList = hasil.map(h => h.nilai).filter(v => v !== null);
-    const rata = nilaiList.reduce((a,b) => a+b,0) / nilaiList.length;
-    const kelompokCount = { A:0, B:0, C:0, D:0, E:0 };
-    hasil.forEach(h => kelompokCount[h.kelompok]++);
-    res.json({ rata, median: nilaiList.sort((a,b)=>a-b)[Math.floor(nilaiList.length/2)], kelompokCount });
+    const data = await db.all(
+      "SELECT * FROM hasil_asesmen WHERE asesmen_id = ?",
+      [req.params.asesmen_id],
+    );
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 }
 
-module.exports = { analisisKompetensi, learningGap, treatment, analisisKelas };
+async function getAnalisisSiswa(req, res) {
+  try {
+    const db = getDb();
+    const data = await db.all(
+      "SELECT * FROM hasil_asesmen WHERE siswa_id = ?",
+      [req.params.siswa_id],
+    );
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+async function generateLaporanAnalisis(req, res) {
+  try {
+    // Logika untuk generate laporan (bisa disesuaikan nanti)
+    res.json({ message: "Laporan berhasil di-generate" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+module.exports = {
+  getAnalisisAsesmen,
+  getAnalisisSiswa,
+  generateLaporanAnalisis,
+};
