@@ -1,0 +1,4 @@
+node_modules/
+.env
+teacher_assistant.db
+.DS_Store
